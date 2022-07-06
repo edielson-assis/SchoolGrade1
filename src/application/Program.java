@@ -1,18 +1,23 @@
 package application;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import model.entities.SchoolGrade;
 import model.enums.DaysOfTheWeek;
+import model.exceptions.DomainException;
 
 public class Program {
 
     private static String daysOfTheWeek;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         
         try {                
             System.out.print("How many classes will be registered? ");
@@ -32,11 +37,11 @@ public class Program {
                         sc.nextLine();
                         String classes = sc.nextLine();
                         System.out.print("Enter initial hour(HH:mm): ");
-                        String initialHour = sc.next();
+                        Date initialHour = sdf.parse(sc.next());
                         System.out.print("Enter last hour(HH:mm): ");
-                        String lastHour = sc.next();
+                        Date lastHour = sdf.parse(sc.next());
                         System.out.println();
-
+                        
                         vector[i] = new SchoolGrade(classes, initialHour, lastHour, DaysOfTheWeek.valueOf(daysOfTheWeek));
                     }
                 } while (daysOfTheWeek.equals("SUNDAY"));
@@ -75,6 +80,12 @@ public class Program {
                 }
             }
         }
+        catch (ParseException e) {
+            System.out.println("Invalid date format");
+        }
+        catch (DomainException e) {
+            System.out.println(e.getMessage());
+        }
         catch (InputMismatchException e) {
             System.out.println("Input error");
         }
@@ -86,10 +97,9 @@ public class Program {
             e.printStackTrace();
         }
         finally {
-            System.out.println("End of program");
+            System.out.println("\nEnd of program");
         }
 
         sc.close();
-        
     }
 }

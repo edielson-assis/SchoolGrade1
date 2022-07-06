@@ -1,19 +1,29 @@
 package model.entities;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import model.enums.DaysOfTheWeek;
+import model.exceptions.DomainException;
 
 public class SchoolGrade {
     
     private String classes;
-    private String initialHour;
-    private String lastHour;
+    private Date initialHour;
+    private Date lastHour;
     private DaysOfTheWeek daysOfTheWeek;
+
+    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
     public SchoolGrade() {
 
     }
 
-    public SchoolGrade(String classes, String initialHour, String lastHour, DaysOfTheWeek daysOfTheWeek) {
+    public SchoolGrade(String classes, Date initialHour, Date lastHour, DaysOfTheWeek daysOfTheWeek) {
+        if (!lastHour.after(initialHour)) {
+			throw new DomainException("Error : last hour must be after initial hour");
+		}
         this.classes = classes;
         this.initialHour = initialHour;
         this.lastHour = lastHour;
@@ -28,19 +38,19 @@ public class SchoolGrade {
         this.classes = classes;
     }
 
-    public String getInitialHour() {
+    public Date getInitialHour() {
         return initialHour;
     }
 
-    public void setInitialHour(String initialHour) {
+    public void setInitialHour(Date initialHour) {
         this.initialHour = initialHour;
     }
 
-    public String getLastHour() {
+    public Date getLastHour() {
         return lastHour;
     }
 
-    public void setLastHour(String lastHour) {
+    public void setLastHour(Date lastHour) {
         this.lastHour = lastHour;
     }
 
@@ -54,17 +64,31 @@ public class SchoolGrade {
 
     public void removeInform() {
         this.classes = null;
-        this.initialHour = null;
-        this.lastHour = null;
-        this.daysOfTheWeek = null;
-    }
-
-    public Double totalHours() {
-        return Double.parseDouble(lastHour.replace(':', '.')) - Double.parseDouble(initialHour.replace(':', '.')) - 0.4;
     }
     
+    public long durationHours() {
+        long diff = lastHour.getTime() - initialHour.getTime();
+        return TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    public long durationMinutes() {
+        long diff = lastHour.getTime() - initialHour.getTime();
+        TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
+        return (diff / (60 * 1000) % 60);
+    }
+
     @Override
     public String toString() {
-       return daysOfTheWeek + ", " + classes + ": " + initialHour + "-" + lastHour + ". Total hours: " + String.format("%.2f", totalHours());
+        return  daysOfTheWeek
+                + ", " 
+                + classes
+                + ": "
+                + sdf.format(initialHour) 
+                + "-" 
+                + sdf.format(lastHour) 
+                + ". Total hours: "
+                + durationHours()
+                + "."
+                + durationMinutes();
     }
 }
