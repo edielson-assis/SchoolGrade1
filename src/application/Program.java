@@ -28,7 +28,7 @@ public class Program {
             for (int i = 0; i < M; i++) {
                 do {
                     System.out.print("Enter days of the week: ");
-                    daysOfTheWeek = sc.next();
+                    daysOfTheWeek = sc.next().toUpperCase();
                     if (daysOfTheWeek.equals("SUNDAY")) {
                         System.out.println("This day is not available. Try again\n");
                     }
@@ -61,7 +61,7 @@ public class Program {
 
                 SchoolGrade updatedVector[] = null;
                 for (int i = 0; i < vector.length; i++) {
-                    if (vector[i].getClasses().equals(classes)) {
+                    if (vector[i].getClasses().equalsIgnoreCase(classes)) {
                         vector[i].removeInform();
                         updatedVector = new SchoolGrade[vector.length-1];
                         for (int j = 0; j < i; j++) {
@@ -81,7 +81,7 @@ public class Program {
             }
         }
         catch (ParseException e) {
-            System.out.println("Invalid date format");
+            System.out.println("Invalid hour format");
         }
         catch (DomainException e) {
             System.out.println(e.getMessage());
