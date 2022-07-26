@@ -2,6 +2,7 @@ package application;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -48,6 +49,7 @@ public class Program {
             }
 
             System.out.println("Grade:\n");
+            Arrays.sort(vector);
             for (int i = 0; i < vector.length; i++) {
                 System.out.println(vector[i]);
             }
@@ -57,7 +59,8 @@ public class Program {
 
             if (type == 'y') {
                 System.out.print("Which class will be remove? ");
-                String classes = sc.next();
+                sc.nextLine();
+                String classes = sc.nextLine();
 
                 SchoolGrade updatedVector[] = null;
                 for (int i = 0; i < vector.length; i++) {
